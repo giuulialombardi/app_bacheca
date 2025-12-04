@@ -16,7 +16,6 @@ class MessageHandler(BaseHandler):
         cursor = messages.find({})
         out = []
 
-
         async for t in cursor:
             author = t["author"]
             try:
@@ -30,7 +29,6 @@ class MessageHandler(BaseHandler):
             out.append({
                 "id": str(t["_id"]),
                 "text": t["text"],
-                "done": t["done"],
                 "author": email,
                 "created_at": t["created"]
             })
@@ -52,30 +50,11 @@ class MessageHandler(BaseHandler):
         result = await messages.insert_one({
             "user_id": ObjectId(user["id"]),
             "text": text,
-            "done": False,
             "created": datetime.datetime.now().isoformat(),
             "author": email
         })
 
         return self.write_json({"id": str(result.inserted_id)}, 201)
-
-
-class MessageUpdateHandler(BaseHandler):
-    async def put(self, task_id):
-        user = self.get_current_user()
-        if not user:
-            return self.write_json({"error": "Non autenticato"}, 401)
-
-        body = tornado.escape.json_decode(self.request.body)
-        done = body.get("done")
-
-        await messages.update_one(
-            {"_id": ObjectId(task_id), "user_id": ObjectId(user["id"])},
-            {"$set": {"done": bool(done)}}
-        )
-
-        return self.write_json({"message": "Aggiornato"})
-
 
 class MessageDeleteHandler(BaseHandler):
     async def delete(self, task_id):

@@ -64,21 +64,12 @@ async function loadTasks() {
         // Area icone
         const actions = document.createElement("div");
 
-        // ✓ / ↺ icona
-        const toggle = document.createElement("button");
-        toggle.className = "icon-btn";
-        toggle.innerHTML = t.done
-            ? '<i class="fa-solid fa-rotate-left" title="Segna come incompleta"></i>'
-            : '<i class="fa-solid fa-check" title="Completa"></i>';
-        toggle.onclick = () => updateTask(t.id, !t.done);
-
         // 🗑 icona
         const del = document.createElement("button");
         del.className = "icon-btn";
         del.innerHTML = '<i class="fa-solid fa-trash" title="Elimina"></i>';
         del.onclick = () => deleteTask(t.id);
 
-        actions.appendChild(toggle);
         actions.appendChild(del);
 
         li.appendChild(textSpan);

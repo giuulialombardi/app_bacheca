@@ -4,7 +4,7 @@ import tornado.escape
 
 from db import COOKIE_SECRET, PORT
 from auth import RegisterHandler, LoginHandler, LogoutHandler
-from messages import MessageHandler, MessageUpdateHandler, MessageDeleteHandler
+from messages import MessageHandler, MessageDeleteHandler
 
 
 def make_app():
@@ -15,7 +15,6 @@ def make_app():
             (r"/api/logout", LogoutHandler),
 
             (r"/api/tasks", MessageHandler),
-            (r"/api/tasks/([a-f0-9]{24})", MessageUpdateHandler),
             (r"/api/tasks/([a-f0-9]{24})/delete", MessageDeleteHandler),
 
             (r"/static/(.*)", tornado.web.StaticFileHandler, {"path": "static"}),
