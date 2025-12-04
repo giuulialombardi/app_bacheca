@@ -58,7 +58,8 @@ async function loadTasks() {
 
         // Testo
         const textSpan = document.createElement("span");
-        textSpan.textContent = t.text;
+        textSpan.textContent = `${t.text}(pubblicato da ${t.author} il ${new Date(t.created_at).toLocaleString()})`;
+
 
         // Area icone
         const actions = document.createElement("div");

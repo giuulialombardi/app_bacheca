@@ -1,3 +1,6 @@
+import datetime
+import json
+
 import tornado.escape
 from bson import ObjectId
 from db import messages
@@ -12,11 +15,24 @@ class MessageHandler(BaseHandler):
 
         cursor = messages.find({})
         out = []
+
+
         async for t in cursor:
+            author = t["author"]
+            try:
+                if isinstance(author, str) and author.startswith("{"):
+                    author_obj = json.loads(author)
+                    email = author_obj.get("email", author)
+                else:
+                    email = author
+            except:
+                email = author
             out.append({
                 "id": str(t["_id"]),
                 "text": t["text"],
-                "done": t["done"]
+                "done": t["done"],
+                "author": email,
+                "created_at": t["created"]
             })
 
         return self.write_json({"items": out})
@@ -32,10 +48,13 @@ class MessageHandler(BaseHandler):
         if not text:
             return self.write_json({"error": "Testo obbligatorio"}, 400)
 
+        email = (self.get_secure_cookie("user")).decode("utf-8")
         result = await messages.insert_one({
             "user_id": ObjectId(user["id"]),
             "text": text,
-            "done": False
+            "done": False,
+            "created": datetime.datetime.now().isoformat(),
+            "author": email
         })
 
         return self.write_json({"id": str(result.inserted_id)}, 201)
