@@ -1,3 +1,7 @@
+let tuttiMessaggi = [];
+let paginaCorrente = 1;
+const perPagina = 10;
+
 async function login() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
@@ -43,18 +47,13 @@ async function logout() {
 
 async function loadTasks() {
     const res = await fetch("/api/tasks");
-
     if (res.status !== 200) {
         location.href = "login.html";
         return;
     }
-
     const data = await res.json();
     const list = document.getElementById("taskList");
     list.innerHTML = "";
-
-    const utente=data.current_user;
-    print(utente);
 
     data.items.forEach(t => {
         const li = document.createElement("li");
@@ -64,12 +63,12 @@ async function loadTasks() {
         const textSpan = document.createElement("span");
         textSpan.textContent = `${t.text} (pubblicato da ${t.author} il ${t.created_at})`;
 
-
         // Area icone
         const actions = document.createElement("div");
 
         // 🗑 icona
         if(t.deletable === "True"){
+            li.style.backgroundColor = "#afeeee";
             const del = document.createElement("button");
             del.className = "icon-btn";
             del.innerHTML = '<i class="fa-solid fa-trash" title="Elimina"></i>';
@@ -80,6 +79,8 @@ async function loadTasks() {
         li.appendChild(textSpan);
         li.appendChild(actions);
         list.appendChild(li);
+
+        loadTasks();
     });
 }
 
