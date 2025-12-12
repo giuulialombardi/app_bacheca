@@ -1,6 +1,3 @@
-let tuttiMessaggi = [];
-let paginaCorrente = 1;
-const perPagina = 10;
 
 async function login() {
     const email = document.getElementById("email").value;
@@ -81,8 +78,24 @@ async function loadTasks() {
         li.appendChild(actions);
         list.appendChild(li);
 
-        loadTasks();
     });
+}
+
+function sortMessages() {
+    const list = document.getElementById("taskList");
+    const mess = Array.from(list.children);
+
+    mess.sort((a, b) => {
+        const dateA = a.getAttribute('data-date');
+        const dateB = b.getAttribute('data-date');
+
+        if (!dateA || !dateB) return 0;
+
+        return new Date(dateB) - new Date(dateA);
+    });
+
+    list.innerHTML = "";
+    tasks.forEach(task => list.appendChild(task));
 }
 
 async function addTask() {
@@ -109,6 +122,10 @@ async function updateTask(id, done) {
 
 
 async function deleteTask(id) {
+    const confirmed = confirm("Sei sicuro di voler eliminare questo messaggio?");
+    if (!confirmed) return;
+    await fetch(`/api/tasks/${id}/delete`, { method: "DELETE" });
+    loadTasks();
     await fetch(`/api/tasks/${id}/delete`, {method: "DELETE"});
     loadTasks();
 }

@@ -181,3 +181,18 @@ li.done .icon-btn i.fa-check {
 .icon-btn i.fa-rotate-left {
     color: #ff9800 !important;
 }
+
+button_data {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+button_data:hover {
+    background-color: #45a049;
+}
