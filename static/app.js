@@ -40,6 +40,7 @@ async function logout() {
 }
 
 
+
 async function loadTasks() {
     const res = await fetch("/api/tasks");
 
@@ -52,25 +53,29 @@ async function loadTasks() {
     const list = document.getElementById("taskList");
     list.innerHTML = "";
 
+    const utente=data.current_user;
+    print(utente);
+
     data.items.forEach(t => {
         const li = document.createElement("li");
-        li.className = t.done ? "done" : "";
+        //li.className = t.done ? "done" : "";
 
         // Testo
         const textSpan = document.createElement("span");
-        textSpan.textContent = `${t.text}(pubblicato da ${t.author} il ${new Date(t.created_at).toLocaleString()})`;
+        textSpan.textContent = `${t.text} (pubblicato da ${t.author} il ${t.created_at})`;
 
 
         // Area icone
         const actions = document.createElement("div");
 
         // 🗑 icona
-        const del = document.createElement("button");
-        del.className = "icon-btn";
-        del.innerHTML = '<i class="fa-solid fa-trash" title="Elimina"></i>';
-        del.onclick = () => deleteTask(t.id);
-
-        actions.appendChild(del);
+        if(t.deletable === "True"){
+            const del = document.createElement("button");
+            del.className = "icon-btn";
+            del.innerHTML = '<i class="fa-solid fa-trash" title="Elimina"></i>';
+            del.onclick = () => deleteTask(t.id);
+            actions.appendChild(del);
+        }
 
         li.appendChild(textSpan);
         li.appendChild(actions);

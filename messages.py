@@ -26,13 +26,24 @@ class MessageHandler(BaseHandler):
                     email = author
             except:
                 email = author
-            out.append({
-                "id": str(t["_id"]),
-                "text": t["text"],
-                "author": email,
-                "created_at": t["created"]
-            })
+            if(t["author"]==user["id"]):
+                out.append({
+                    "id": str(t["_id"]),
+                    "text": t["text"],
+                    "author": email,
+                    "created_at": t["created"],
+                    "deletable": "True"
+                })
+            else:
+                out.append({
+                    "id": str(t["_id"]),
+                    "text": t["text"],
+                    "author": email,
+                    "created_at": t["created"],
+                    "deletable": "True" if t["user_id"] == ObjectId(user["id"]) else "False"
+                })
 
+        #current_user = (self.get_secure_cookie("user")).decode("utf-8")
         return self.write_json({"items": out})
 
     async def post(self):
@@ -50,7 +61,7 @@ class MessageHandler(BaseHandler):
         result = await messages.insert_one({
             "user_id": ObjectId(user["id"]),
             "text": text,
-            "created": datetime.datetime.now().isoformat(),
+            "created": str(datetime.datetime.date(datetime.datetime.now())),
             "author": email
         })
 
