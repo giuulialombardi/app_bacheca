@@ -130,5 +130,19 @@ async function deleteTask(id) {
     loadTasks();
 }
 
+function scrollToTop() {
+    window.scrollTo(0, 0);
+}
+
+window.onscroll = () => {
+    // Mostra il pulsante quando l'utente scorre giù
+    const scrollButton = document.getElementById("scrollToTop");
+    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+        scrollButton.style.display = "block";
+    } else {
+        scrollButton.style.display = "none";
+    }
+};
+
 if (location.pathname.endsWith("messages.html"))
     loadTasks();
