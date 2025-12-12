@@ -69,6 +69,7 @@ async function loadTasks() {
         // 🗑 icona
         if(t.deletable === "True"){
             li.style.backgroundColor = "#afeeee";
+
             const del = document.createElement("button");
             del.className = "icon-btn";
             del.innerHTML = '<i class="fa-solid fa-trash" title="Elimina"></i>';
