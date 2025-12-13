@@ -41,7 +41,6 @@ async function logout() {
 }
 
 
-
 async function loadTasks() {
     const res = await fetch("/api/tasks");
     if (res.status !== 200) {
@@ -58,7 +57,9 @@ async function loadTasks() {
 
         // Testo
         const textSpan = document.createElement("span");
-        textSpan.textContent = `${t.text} (pubblicato da ${t.author} il ${t.created_at})`;
+        textSpan.innerHTML = `${t.text}<br>
+        pubblicato da ${t.author}<br>
+        ${t.created_at}`;
 
         // Area icone
         const actions = document.createElement("div");
@@ -135,7 +136,6 @@ function scrollToTop() {
 }
 
 window.onscroll = () => {
-    // Mostra il pulsante quando l'utente scorre giù
     const scrollButton = document.getElementById("scrollToTop");
     if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
         scrollButton.style.display = "block";

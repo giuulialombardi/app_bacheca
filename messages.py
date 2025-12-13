@@ -61,7 +61,7 @@ class MessageHandler(BaseHandler):
         result = await messages.insert_one({
             "user_id": ObjectId(user["id"]),
             "text": text,
-            "created": str(datetime.datetime.date(datetime.datetime.now())),
+            "created": str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")),
             "author": email
         })
 
